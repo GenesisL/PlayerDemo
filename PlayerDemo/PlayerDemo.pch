@@ -1,0 +1,18 @@
+//
+//  PlayerDemo.pch
+//  PlayerDemo
+//
+//  Created by 林开宇 on 2017/6/15.
+//  Copyright © 2017年 林开宇. All rights reserved.
+//
+
+#ifndef PlayerDemo_pch
+#define PlayerDemo_pch
+
+#import "Masonry.h"
+#import "UIImageView+WebCache.h"
+#import "AFNetworking.h"
+
+#import "DefString.h"
+
+#endif /* PlayerDemo_pch */

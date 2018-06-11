@@ -8,6 +8,11 @@
 
 #import "AppDelegate.h"
 
+#import <Sentry/Sentry.h>
+#import <AVFoundation/AVFoundation.h>
+
+#import "LGReachability.h"
+
 @interface AppDelegate ()
 
 @end
@@ -17,6 +22,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    //CrashCache
+    [self crashCache];
+    
+    //注册后台播放
+    [self registAudioSession];
+    
+    //NetWork Check
+    [self netWorkCheck];
+    
     return YES;
 }
 
@@ -45,6 +60,40 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+
+#pragma mark - Funcation
+- (void)crashCache {
+    NSError *error = nil;
+    SentryClient *client = [[SentryClient alloc] initWithDsn:@"https://4d3b3666546041fab1012e191ea8409e@sentry.io/1222103" didFailWithError:&error];
+    SentryClient.sharedClient = client;
+    [SentryClient.sharedClient startCrashHandlerWithError:&error];
+    if (nil != error) {
+        NSLog(@"%@", error);
+    }
+}
+
+- (void)registAudioSession {
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    [session setActive:YES error:nil];
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+}
+
+- (void)netWorkCheck {
+    [LGReachability LGwithSuccessBlock:^(NSString* status) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTICENTER_NETWORKSTATUS object:nil userInfo:@{@"NetStatus": status}];
+        if ([status isEqualToString:@"无连接"]) {
+            
+        }
+        else if ([status isEqualToString:@"3G/4G网络"]) {
+            
+        }
+        else if ([status isEqualToString:@"wifi状态下"]) {
+            
+        }
+        
+    }];
 }
 
 
