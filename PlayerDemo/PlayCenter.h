@@ -8,10 +8,33 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PlayCenter : NSObject
+#import "STKAudioPlayer.h"
+
+typedef NS_ENUM(NSUInteger, PlayerCircleMode) {
+    PlayerCircleModeCircle,
+    PlayerCircleModeSingle,
+    PlayerCircleModeRandom,
+};
+
+@interface PlayCenter : NSObject <STKAudioPlayerDelegate>
 
 @property (nonatomic, strong) NSMutableArray *playQueue;
 
+@property (nonatomic, strong) STKAudioPlayer *audioPlayer;
+
 @property (nonatomic, readonly, assign) NSInteger currentIndex;
+
+@property (nonatomic, assign) PlayerCircleMode circleMode;
+
++ (instancetype)mainCenter;
+
+//Play Control
+- (BOOL)play;
+- (BOOL)pause;
+- (BOOL)previous;
+- (BOOL)next;
+- (BOOL)stop;
+
+
 
 @end

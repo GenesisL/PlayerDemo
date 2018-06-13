@@ -23,6 +23,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
+    //Cookies
+    [self saveUUIDCookies];
+    
     //CrashCache
     [self crashCache];
     
@@ -94,6 +97,39 @@
         }
         
     }];
+}
+
+-(void)saveUUIDCookies{
+    if (self.UUIDCache_S) {
+        NSMutableDictionary *cookieProperties = [NSMutableDictionary dictionary];
+        [cookieProperties setObject:@"equip_code" forKey:NSHTTPCookieName];
+        [cookieProperties setObject:self.UUIDCache_S forKey:NSHTTPCookieValue];
+        [cookieProperties setObject:@".missevan.com" forKey:NSHTTPCookieDomain];
+        [cookieProperties setObject:@"/" forKey:NSHTTPCookiePath];
+        [cookieProperties setObject:[[NSDate date] dateByAddingTimeInterval:60*60*24*365] forKey:NSHTTPCookieExpires];
+        NSHTTPCookie *cookieuser = [NSHTTPCookie cookieWithProperties:cookieProperties];
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookieuser];
+    }
+}
+
+- (NSString *)UUIDCache_S{
+    if (!_UUIDCache_S) {
+        NSString *UUIDCache = [[NSUserDefaults standardUserDefaults] objectForKey:@"UUIDCache"];
+        
+        if (UUIDCache == nil) {
+            UUIDCache = [UIDevice currentDevice].identifierForVendor.UUIDString.lowercaseString;
+            if (UUIDCache&&UUIDCache.length>0) {
+                [[NSUserDefaults standardUserDefaults] setObject:UUIDCache forKey:@"UUIDCache"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }else{
+                UUIDCache = [NSString stringWithFormat:@"%0.0f%i",(double)([[NSDate date] timeIntervalSince1970]*1000),((int)arc4random_uniform((int)1000))];
+                [[NSUserDefaults standardUserDefaults] setObject:UUIDCache forKey:@"UUIDCache"];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+        }
+        _UUIDCache_S = UUIDCache;
+    }
+    return _UUIDCache_S;
 }
 
 

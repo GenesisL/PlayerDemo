@@ -13,3 +13,5 @@
 #endif /* DefString_h */
 
 #define NOTICENTER_NETWORKSTATUS        @"NetWorkStatus"
+
+#define REQUEST_HOST            @"https://app.uat.missevan.com/"

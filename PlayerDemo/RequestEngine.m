@@ -8,6 +8,8 @@
 
 #import "RequestEngine.h"
 
+#import "AppDelegate.h"
+
 static AFHTTPRequestOperationManager *manager = nil;
 
 @implementation RequestEngine
@@ -17,7 +19,8 @@ static AFHTTPRequestOperationManager *manager = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         manager = [AFHTTPRequestOperationManager manager];
-        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript", @"text/html", nil];
+        [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        [manager.requestSerializer setValue:((AppDelegate *)[UIApplication sharedApplication].delegate).UUIDCache_S forHTTPHeaderField:@"equip-code"];
     });
     return manager;
 }

@@ -8,11 +8,10 @@
 
 #import "ViewController.h"
 
-#import "STKAudioPlayer.h"
+#import "UserDefaultCenter.h"
+#import "DownloadCenter.h"
 
 @interface ViewController ()
-
-
 
 @end
 
@@ -21,6 +20,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    
+//    [[DownloadCenter shareCenter] cacheFilesWithURL:@"http://static.missevan.com//128BIT/201506/27/bcf92338bbe1e48833a17867d9f24bdc170815.mp3"];
+    [[DownloadCenter shareCenter] tryCacheFilesWithURL:@"http://static.missevan.com//128BIT/201506/27/bcf92338bbe1e48833a17867d9f24bdc170815.mp3"];
 }
 
 

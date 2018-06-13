@@ -81,9 +81,12 @@
 		8D1BD8561EF3B7AA00E2928F /* STKHTTPDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1BD84A1EF3B7AA00E2928F /* STKHTTPDataSource.m */; };
 		8D1BD8571EF3B7AA00E2928F /* STKLocalFileDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1BD84C1EF3B7AA00E2928F /* STKLocalFileDataSource.m */; };
 		8D1BD8581EF3B7AA00E2928F /* STKQueueEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1BD84E1EF3B7AA00E2928F /* STKQueueEntry.m */; };
+		8D39B4DA20CF9B89009A60BD /* DownloadCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D39B4D920CF9B89009A60BD /* DownloadCenter.m */; };
+		8D39B4DE20CFA1A7009A60BD /* UserDefaultCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D39B4DD20CFA1A7009A60BD /* UserDefaultCenter.m */; };
 		8D7952F520CA621200E94DFC /* PlayCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7952F420CA621200E94DFC /* PlayCenter.m */; };
 		8D7952F920CA650B00E94DFC /* LGReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7952F820CA650B00E94DFC /* LGReachability.m */; };
 		8D7952FD20CA658B00E94DFC /* Sentry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8D7952FA20CA657800E94DFC /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8D7C6B1E20CE5DC200A9F764 /* SoundRequestEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7C6B1D20CE5DC200A9F764 /* SoundRequestEngine.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -267,12 +270,19 @@
 		8D1BD84D1EF3B7AA00E2928F /* STKQueueEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STKQueueEntry.h; sourceTree = "<group>"; };
 		8D1BD84E1EF3B7AA00E2928F /* STKQueueEntry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STKQueueEntry.m; sourceTree = "<group>"; };
 		8D1BD84F1EF3B7AA00E2928F /* StreamingKit-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "StreamingKit-Prefix.pch"; sourceTree = "<group>"; };
+		8D39B4D820CF9B89009A60BD /* DownloadCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DownloadCenter.h; sourceTree = "<group>"; };
+		8D39B4D920CF9B89009A60BD /* DownloadCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadCenter.m; sourceTree = "<group>"; };
+		8D39B4DC20CFA1A7009A60BD /* UserDefaultCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserDefaultCenter.h; sourceTree = "<group>"; };
+		8D39B4DD20CFA1A7009A60BD /* UserDefaultCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserDefaultCenter.m; sourceTree = "<group>"; };
 		8D7952F320CA621200E94DFC /* PlayCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayCenter.h; sourceTree = "<group>"; };
 		8D7952F420CA621200E94DFC /* PlayCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayCenter.m; sourceTree = "<group>"; };
 		8D7952F720CA650B00E94DFC /* LGReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGReachability.h; sourceTree = "<group>"; };
 		8D7952F820CA650B00E94DFC /* LGReachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGReachability.m; sourceTree = "<group>"; };
 		8D7952FA20CA657800E94DFC /* Sentry.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sentry.framework; sourceTree = "<group>"; };
 		8D7C6B1B20CA775A00A9F764 /* DefString.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DefString.h; sourceTree = "<group>"; };
+		8D7C6B1C20CE5DC200A9F764 /* SoundRequestEngine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SoundRequestEngine.h; sourceTree = "<group>"; };
+		8D7C6B1D20CE5DC200A9F764 /* SoundRequestEngine.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SoundRequestEngine.m; sourceTree = "<group>"; };
+		8D7C6B1F20CF731600A9F764 /* APIURL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIURL.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,15 +330,16 @@
 		8D1BD6D11EF294BF00E2928F /* PlayerDemo */ = {
 			isa = PBXGroup;
 			children = (
+				8D7C6B2020CF968000A9F764 /* ViewController */,
 				8D1BD7071EF395E700E2928F /* Plugin */,
 				8D1BD7001EF3933E00E2928F /* RequestEngine */,
 				8D1BD6FC1EF392CD00E2928F /* Model */,
 				8DF1CCD920CA7630004C8893 /* Static */,
+				8D39B4DB20CFA17F009A60BD /* UserDefaultCenter */,
+				8D6ECE0320CF99E10047E710 /* DownloadCenter */,
 				8D1BD6F71EF2987E00E2928F /* PlayCenter */,
 				8D1BD6D51EF294BF00E2928F /* AppDelegate.h */,
 				8D1BD6D61EF294BF00E2928F /* AppDelegate.m */,
-				8D1BD6D81EF294BF00E2928F /* ViewController.h */,
-				8D1BD6D91EF294BF00E2928F /* ViewController.m */,
 				8D1BD6DB1EF294BF00E2928F /* Main.storyboard */,
 				8D1BD6DE1EF294BF00E2928F /* Assets.xcassets */,
 				8D1BD6E01EF294BF00E2928F /* LaunchScreen.storyboard */,
@@ -379,6 +390,8 @@
 			children = (
 				8D1BD7041EF3949D00E2928F /* RequestEngine.h */,
 				8D1BD7051EF3949D00E2928F /* RequestEngine.m */,
+				8D7C6B1C20CE5DC200A9F764 /* SoundRequestEngine.h */,
+				8D7C6B1D20CE5DC200A9F764 /* SoundRequestEngine.m */,
 			);
 			name = RequestEngine;
 			sourceTree = "<group>";
@@ -593,6 +606,24 @@
 			path = StreamingKit;
 			sourceTree = "<group>";
 		};
+		8D39B4DB20CFA17F009A60BD /* UserDefaultCenter */ = {
+			isa = PBXGroup;
+			children = (
+				8D39B4DC20CFA1A7009A60BD /* UserDefaultCenter.h */,
+				8D39B4DD20CFA1A7009A60BD /* UserDefaultCenter.m */,
+			);
+			name = UserDefaultCenter;
+			sourceTree = "<group>";
+		};
+		8D6ECE0320CF99E10047E710 /* DownloadCenter */ = {
+			isa = PBXGroup;
+			children = (
+				8D39B4D820CF9B89009A60BD /* DownloadCenter.h */,
+				8D39B4D920CF9B89009A60BD /* DownloadCenter.m */,
+			);
+			name = DownloadCenter;
+			sourceTree = "<group>";
+		};
 		8D7952F620CA64EE00E94DFC /* LGReachability */ = {
 			isa = PBXGroup;
 			children = (
@@ -602,10 +633,20 @@
 			path = LGReachability;
 			sourceTree = "<group>";
 		};
+		8D7C6B2020CF968000A9F764 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				8D1BD6D81EF294BF00E2928F /* ViewController.h */,
+				8D1BD6D91EF294BF00E2928F /* ViewController.m */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
 		8DF1CCD920CA7630004C8893 /* Static */ = {
 			isa = PBXGroup;
 			children = (
 				8D7C6B1B20CA775A00A9F764 /* DefString.h */,
+				8D7C6B1F20CF731600A9F764 /* APIURL.h */,
 			);
 			name = Static;
 			sourceTree = "<group>";
@@ -663,6 +704,11 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = 9RP82T9UKG;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
 					};
 					8D1BD6E71EF294BF00E2928F = {
 						CreatedOnToolsVersion = 8.3.2;
@@ -723,7 +769,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "if which sentry-cli >/dev/null; then\nexport SENTRY_ORG=leon-t1\nexport SENTRY_PROJECT=playerdemo\nexport SENTRY_AUTH_TOKEN=\n21e731159dc24da5ad8a9815c0cfefcecff9c8107f71487dba9a80cad9f6bb45\n\nERROR=$(sentry-cli upload-dsym 2>&1 >/dev/null)\nif [ ! $? -eq 0 ]; then\necho \"warning: sentry-cli - $ERROR\"\nfi\nelse\necho \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi";
+			shellScript = "if which sentry-cli >/dev/null; then\nexport SENTRY_ORG=leon-t1\nexport SENTRY_PROJECT=playerdemo\nexport SENTRY_AUTH_TOKEN=21e731159dc24da5ad8a9815c0cfefcecff9c8107f71487dba9a80cad9f6bb45\n\nERROR=$(sentry-cli upload-dsym 2>&1 >/dev/null)\nif [ ! $? -eq 0 ]; then\necho \"warning: sentry-cli - $ERROR\"\nfi\nelse\necho \"warning: sentry-cli not installed, download from https://github.com/getsentry/sentry-cli/releases\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -747,6 +793,7 @@
 				8D1BD8571EF3B7AA00E2928F /* STKLocalFileDataSource.m in Sources */,
 				8D1BD7351EF395F500E2928F /* AFURLResponseSerialization.m in Sources */,
 				8D1BD7DD1EF3999A00E2928F /* ASIInputStream.m in Sources */,
+				8D7C6B1E20CE5DC200A9F764 /* SoundRequestEngine.m in Sources */,
 				8D1BD7D81EF3999A00E2928F /* ASIDataCompressor.m in Sources */,
 				8D1BD73A1EF395F500E2928F /* UIButton+AFNetworking.m in Sources */,
 				8D1BD80E1EF3B42700E2928F /* View+MASAdditions.m in Sources */,
@@ -766,9 +813,11 @@
 				8D1BD80D1EF3B42700E2928F /* NSLayoutConstraint+MASDebugAdditions.m in Sources */,
 				8D1BD8561EF3B7AA00E2928F /* STKHTTPDataSource.m in Sources */,
 				8D1BD83A1EF3B43600E2928F /* UIImageView+WebCache.m in Sources */,
+				8D39B4DA20CF9B89009A60BD /* DownloadCenter.m in Sources */,
 				8D1BD82F1EF3B43600E2928F /* SDImageCache.m in Sources */,
 				8D1BD8301EF3B43600E2928F /* SDWebImageCompat.m in Sources */,
 				8D1BD80C1EF3B42700E2928F /* NSArray+MASAdditions.m in Sources */,
+				8D39B4DE20CFA1A7009A60BD /* UserDefaultCenter.m in Sources */,
 				8D1BD8351EF3B43600E2928F /* SDWebImagePrefetcher.m in Sources */,
 				8D1BD8381EF3B43600E2928F /* UIImage+MultiFormat.m in Sources */,
 				8D1BD8311EF3B43600E2928F /* SDWebImageDecoder.m in Sources */,
