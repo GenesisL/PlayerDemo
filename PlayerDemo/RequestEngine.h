@@ -20,5 +20,8 @@ typedef void (^RequestBlock)(id returnValue, NSError *error);
 //GET
 + (void)GETWithRequestURL:(NSString *)requestURLString andParameters:(NSDictionary *)parameters andSuccessBlock:(RequestBlock)success andFailedBlock:(RequestBlock) failed;
 
+//HEAD
++ (void)HEADWithRequestURL:(NSString *)requestURLString andSuccessBlock:(RequestBlock)success andFailedBlock:(RequestBlock)failed;
+
 
 @end

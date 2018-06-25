@@ -28,7 +28,7 @@ static AFHTTPRequestOperationManager *manager = nil;
 #pragma mark - POST
 + (void)POSTWithRequestURL:(NSString *)requestURLString andParameters:(NSDictionary *)parameters andSuccessBlock:(RequestBlock)success andFailedBlock:(RequestBlock)failed{
     [[self sharedAFManager] POST:requestURLString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([responseObject[@"status"] isEqualToString:@"success"] || [responseObject[@"state"] isEqualToString:@"success"]) {
+        if ([responseObject[@"success"] boolValue]) {
             success(responseObject, nil);
         }else {
             failed(responseObject, nil);
@@ -40,7 +40,7 @@ static AFHTTPRequestOperationManager *manager = nil;
 
 + (void)POSTWithRequestURL:(NSString *)requestURLString andParameters:(NSDictionary *)parameters andConstructingBodyWithBlock:(void (^)(id <AFMultipartFormData> formData))block andSuccessBlock:(RequestBlock)success andFailedBlock:(RequestBlock)failed{
     [[self sharedAFManager] POST:requestURLString parameters:parameters constructingBodyWithBlock:block success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if ([responseObject[@"status"] isEqualToString:@"success"] || [responseObject[@"state"] isEqualToString:@"success"]) {
+        if ([responseObject[@"success"] boolValue]) {
             success(responseObject, nil);
         }else {
             failed(responseObject, nil);
@@ -54,13 +54,22 @@ static AFHTTPRequestOperationManager *manager = nil;
 #pragma mark - GET
 + (void)GETWithRequestURL:(NSString *)requestURLString andParameters:(NSDictionary *)parameters andSuccessBlock:(RequestBlock)success andFailedBlock:(RequestBlock)failed{
     [[self sharedAFManager] GET:requestURLString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        if([responseObject[@"status"] isEqualToString:@"success"] || [responseObject[@"state"] isEqualToString:@"success"]) {
+        if([responseObject[@"success"] boolValue]) {
             success(responseObject, nil);
         }else {
             failed(responseObject, nil);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failed(nil, error);
+    }];
+}
+
+#pragma mark - HEAD
++ (void)HEADWithRequestURL:(NSString *)requestURLString andSuccessBlock:(RequestBlock)success andFailedBlock:(RequestBlock)failed {
+    [[self sharedAFManager] HEAD:requestURLString parameters:nil success:^(AFHTTPRequestOperation *operation) {
+        success(operation.response.allHeaderFields, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failed(operation.response.allHeaderFields, error);
     }];
 }
 

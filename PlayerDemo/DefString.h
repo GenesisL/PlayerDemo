@@ -12,6 +12,11 @@
 
 #endif /* DefString_h */
 
+//Notice
 #define NOTICENTER_NETWORKSTATUS        @"NetWorkStatus"
 
-#define REQUEST_HOST            @"https://app.uat.missevan.com/"
+
+//Request
+#define REQUEST_HOST            @"https://app.missevan.com/"
+#define IMAGE_HOST              @"http://static.missevan.com/"
+

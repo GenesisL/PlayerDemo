@@ -8,11 +8,10 @@
 
 #import "DownloadCenter.h"
 
-#import <CoreFoundation/CoreFoundation.h>
-#import <CommonCrypto/CommonDigest.h>
-#import <CommonCrypto/CommonHMAC.h>
-#import <stddef.h>
+#import "RequestEngine.h"
+#import "FileMD5Tools.h"
 
+#pragma mark - Get Path
 //NS_INLINE NSString *documentPath () {
 //    return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
 //}
@@ -23,22 +22,33 @@ NS_INLINE NSString *tmpPath (void) {
     return [NSTemporaryDirectory() stringByAppendingPathComponent:@"com.missevan.MediaCaches"];
 }
 
-#define FileHashDefaultChunkSizeForReadingData 256
+#pragma mark - URL Check
+NS_INLINE NSURL *checkURL (id url) {
+    NSURL *fileURL = nil;
+    if ([url isKindOfClass:[NSString class]]) {
+        fileURL = [NSURL URLWithString:url];
+    }else if ([url isKindOfClass:[NSURL class]]) {
+        fileURL = url;
+    }
+    return fileURL;
+}
 
 @interface DownloadCenter ()
 
 @property (nonatomic, assign) CGFloat cacheProgress;
-@property (nonatomic, copy) NSString *fileName;
 
 @end
 
 @implementation DownloadCenter
 
+#pragma mark - Init
 + (instancetype)shareCenter {
     static DownloadCenter *center;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         center = [DownloadCenter new];
+        
+        [ASIHTTPRequest setShouldUpdateNetworkActivityIndicator:NO];
         
         NSFileManager *fileManager = [NSFileManager defaultManager];
         if (![fileManager fileExistsAtPath:cachesPath()]) {
@@ -51,53 +61,87 @@ NS_INLINE NSString *tmpPath (void) {
     return center;
 }
 
+#pragma mark - Reset
+- (void)resetCacheRequest {
+    if (_cacheRequest) {
+        [_cacheRequest clearDelegatesAndCancel];
+        _cacheRequest = nil;
+    }
+}
+
+#pragma mark - Cache Function
 - (void)cacheFilesWithURL:(id)url {
-    NSURL *fileURL;
-    if ([url isKindOfClass:[NSString class]]) {
-        fileURL = [NSURL URLWithString:url];
-    }else if ([url isKindOfClass:[NSURL class]]) {
-        fileURL = url;
-    }else {
+    NSURL *fileURL = checkURL(url);
+    if (fileURL == nil) {
         return;
     }
-    if (_request) {
-        [_request clearDelegatesAndCancel];
-        _request = nil;
+    if (_cacheRequest) {
+        [_cacheRequest clearDelegatesAndCancel];
+        _cacheRequest = nil;
     }
-    _fileName = [fileURL lastPathComponent];
-    _request = [[ASIHTTPRequest alloc] initWithURL:fileURL];
-    [_request addRequestHeader:@"Referer" value:@"https://app.missevan.com/ios"];
-    _request.tag = 1001;
-    self.request.downloadDestinationPath = [cachesPath() stringByAppendingPathComponent:_fileName];
-    NSLog(@"%@", self.request.downloadDestinationPath);
-    self.request.temporaryFileDownloadPath = [tmpPath() stringByAppendingPathComponent:_fileName];
-    NSLog(@"%@", self.request.temporaryFileDownloadPath);
-    self.request.allowResumeForFileDownloads = YES;
-    self.request.downloadProgressDelegate = self;
-    self.request.delegate = self;
-    self.request.shouldContinueWhenAppEntersBackground = YES;
-    [self.request startSynchronous];
+    NSString * fileName = [fileURL lastPathComponent];
+    _cacheRequest = [[ASIHTTPRequest alloc] initWithURL:fileURL];
+    _cacheRequest.requestMethod = @"GET";
+    [_cacheRequest addRequestHeader:@"Referer" value:@"https://app.missevan.com/ios"];
+    _cacheRequest.tag = 1001;
+    _cacheRequest.downloadDestinationPath = [cachesPath() stringByAppendingPathComponent:fileName];
+    NSLog(@"%@", _cacheRequest.downloadDestinationPath);
+    _cacheRequest.temporaryFileDownloadPath = [tmpPath() stringByAppendingPathComponent:fileName];
+    NSLog(@"%@", _cacheRequest.temporaryFileDownloadPath);
+    _cacheRequest.allowResumeForFileDownloads = YES;
+    _cacheRequest.downloadProgressDelegate = self;
+    _cacheRequest.delegate = self;
+    _cacheRequest.shouldContinueWhenAppEntersBackground = YES;
+    [_cacheRequest startAsynchronous];
 }
 - (void)tryCacheFilesWithURL:(id)url {
-    NSURL *fileURL;
+    
+    NSURL *fileURL = checkURL(url);
+    if (fileURL == nil) {
+        return;
+    }
+    //AFNetWork
+    __weak typeof(self) weakSelf = self;
+    [RequestEngine HEADWithRequestURL:fileURL.absoluteString andSuccessBlock:^(id returnValue, NSError *error) {
+        NSLog(@"%@", returnValue);
+        NSString *fileMD5Str = [[FileMD5Tools fileMD5StringByFilePath:[cachesPath() stringByAppendingPathComponent:fileURL.lastPathComponent]] uppercaseString];
+        if (fileMD5Str && [returnValue[@"Etag"] rangeOfString:fileMD5Str].location != NSNotFound) {
+            //Not Download
+        }else {
+            //Download
+            [weakSelf cacheFilesWithURL:fileURL];
+        }
+    } andFailedBlock:^(id returnValue, NSError *error) {}];
+}
+
+#pragma mark - Check Function
+- (BOOL)checkCacheFilesWithURL:(id)url OptionBlock:(void (^)(BOOL isExist, NSString  * _Nullable filePath, unsigned long long dataSize))optionBlock {
+    NSURL *fileURL = nil;
     if ([url isKindOfClass:[NSString class]]) {
         fileURL = [NSURL URLWithString:url];
     }else if ([url isKindOfClass:[NSURL class]]) {
         fileURL = url;
+    }
+    if (fileURL == nil) {
+        return NO;
+    }
+    NSString *path = [cachesPath() stringByAppendingPathComponent:fileURL.lastPathComponent];
+    NSFileManager *manager = [NSFileManager defaultManager];
+    if ([manager fileExistsAtPath:path]) {
+        unsigned long long fs = [manager attributesOfItemAtPath:path error:nil].fileSize;
+        if (optionBlock) {
+            optionBlock(YES, path, fs);
+        }
+        return YES;
     }else {
-        return;
+        if (optionBlock) {
+            optionBlock(NO, nil, 0);
+        }
+        return NO;
     }
-    if (_request) {
-        [_request clearDelegatesAndCancel];
-        _request = nil;
-    }
-    _fileName = [fileURL lastPathComponent];
-    _request = [[ASIHTTPRequest alloc] initWithURL:fileURL];
-    _request.requestMethod = @"HEAD";
-    _request.tag = 1000;
-    [_request addRequestHeader:@"Referer" value:@"https://app.missevan.com/ios"];
-    self.request.delegate = self;
-    [self.request startSynchronous];
+}
+- (void)checkDownloadFilesWithKey:(id)key URL:(id)url {
+    
 }
 
 #pragma mark - ASIProgressDelegate
@@ -117,95 +161,8 @@ NS_INLINE NSString *tmpPath (void) {
 }
 - (void)request:(ASIHTTPRequest *)request didReceiveResponseHeaders:(NSDictionary *)responseHeaders {
     NSLog(@"ReceiveHeader %li, Method: %@", (long)request.tag, request.requestMethod);
-//    NSLog(@"Header: %@", responseHeaders);
-    if (request.tag == 1000) {
-        NSString *fileMD5Str = [CFBridgingRelease(FileMD5HashCreateWithPath(CFBridgingRetain([cachesPath() stringByAppendingPathComponent:_fileName]), 256)) uppercaseString];
-        if (fileMD5Str && [responseHeaders[@"Etag"] rangeOfString:fileMD5Str].location != NSNotFound) {
-            //Not Download
-        }else {
-            //Download
-            [self cacheFilesWithURL:request.originalURL];
-        }
-    }
+    NSLog(@"Header: %@", responseHeaders);
 }
-
-#pragma mark - MD5 Compare
-CFStringRef FileMD5HashCreateWithPath(CFStringRef filePath, size_t chunkSizeForReadingData) {
-    // Declare needed variables
-    CFStringRef result = NULL;
-    CFReadStreamRef readStream = NULL;
-    
-    // Get the file URL
-    CFURLRef fileURL =
-    CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
-                                  (CFStringRef)filePath,
-                                  kCFURLPOSIXPathStyle,
-                                  (Boolean)false);
-    if (!fileURL) goto done;
-    
-    // Create and open the read stream
-    readStream = CFReadStreamCreateWithFile(kCFAllocatorDefault,
-                                            (CFURLRef)fileURL);
-    if (!readStream) goto done;
-    bool didSucceed = (bool)CFReadStreamOpen(readStream);
-    if (!didSucceed) goto done;
-    
-    // Initialize the hash object
-    CC_MD5_CTX hashObject;
-    CC_MD5_Init(&hashObject);
-    
-    // Make sure chunkSizeForReadingData is valid
-    if (!chunkSizeForReadingData) {
-        chunkSizeForReadingData = FileHashDefaultChunkSizeForReadingData;
-    }
-    
-    // Feed the data to the hash object
-    bool hasMoreData = true;
-    while (hasMoreData) {
-        uint8_t buffer[chunkSizeForReadingData];
-        CFIndex readBytesCount = CFReadStreamRead(readStream,
-                                                  (UInt8 *)buffer,
-                                                  (CFIndex)sizeof(buffer));
-        if (readBytesCount == -1) break;
-        if (readBytesCount == 0) {
-            hasMoreData = false;
-            continue;
-        }
-        CC_MD5_Update(&hashObject,
-                      (const void *)buffer,
-                      (CC_LONG)readBytesCount);
-    }
-    
-    // Check if the read operation succeeded
-    didSucceed = !hasMoreData;
-    
-    // Compute the hash digest
-    unsigned char digest[CC_MD5_DIGEST_LENGTH];
-    CC_MD5_Final(digest, &hashObject);
-    
-    // Abort if the read operation failed
-    if (!didSucceed) goto done;
-    
-    // Compute the string result
-    char hash[2 * sizeof(digest) + 1];
-    for (size_t i = 0; i < sizeof(digest); ++i) {
-        snprintf(hash + (2 * i), 3, "%02x", (int)(digest[i]));
-    }
-    result = CFStringCreateWithCString(kCFAllocatorDefault,
-                                       (const char *)hash,
-                                       kCFStringEncodingUTF8);
-    done:
-    if (readStream) {
-        CFReadStreamClose(readStream);
-        CFRelease(readStream);
-    }
-    if (fileURL) {
-        CFRelease(fileURL);
-    }
-    return result;
-}
-
-
 
 
 

@@ -83,6 +83,8 @@
 		8D1BD8581EF3B7AA00E2928F /* STKQueueEntry.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D1BD84E1EF3B7AA00E2928F /* STKQueueEntry.m */; };
 		8D39B4DA20CF9B89009A60BD /* DownloadCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D39B4D920CF9B89009A60BD /* DownloadCenter.m */; };
 		8D39B4DE20CFA1A7009A60BD /* UserDefaultCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D39B4DD20CFA1A7009A60BD /* UserDefaultCenter.m */; };
+		8D686D3020E099C60033BC49 /* PlayQueueID.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D686D2F20E099C60033BC49 /* PlayQueueID.m */; };
+		8D686D3320E0EFBA0033BC49 /* FileMD5Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D686D3220E0EFBA0033BC49 /* FileMD5Tools.m */; };
 		8D7952F520CA621200E94DFC /* PlayCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7952F420CA621200E94DFC /* PlayCenter.m */; };
 		8D7952F920CA650B00E94DFC /* LGReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7952F820CA650B00E94DFC /* LGReachability.m */; };
 		8D7952FD20CA658B00E94DFC /* Sentry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8D7952FA20CA657800E94DFC /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -274,6 +276,10 @@
 		8D39B4D920CF9B89009A60BD /* DownloadCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DownloadCenter.m; sourceTree = "<group>"; };
 		8D39B4DC20CFA1A7009A60BD /* UserDefaultCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserDefaultCenter.h; sourceTree = "<group>"; };
 		8D39B4DD20CFA1A7009A60BD /* UserDefaultCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserDefaultCenter.m; sourceTree = "<group>"; };
+		8D686D2E20E099C60033BC49 /* PlayQueueID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayQueueID.h; sourceTree = "<group>"; };
+		8D686D2F20E099C60033BC49 /* PlayQueueID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayQueueID.m; sourceTree = "<group>"; };
+		8D686D3120E0EFBA0033BC49 /* FileMD5Tools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileMD5Tools.h; sourceTree = "<group>"; };
+		8D686D3220E0EFBA0033BC49 /* FileMD5Tools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileMD5Tools.m; sourceTree = "<group>"; };
 		8D7952F320CA621200E94DFC /* PlayCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayCenter.h; sourceTree = "<group>"; };
 		8D7952F420CA621200E94DFC /* PlayCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayCenter.m; sourceTree = "<group>"; };
 		8D7952F720CA650B00E94DFC /* LGReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGReachability.h; sourceTree = "<group>"; };
@@ -372,6 +378,8 @@
 			children = (
 				8D7952F320CA621200E94DFC /* PlayCenter.h */,
 				8D7952F420CA621200E94DFC /* PlayCenter.m */,
+				8D686D2E20E099C60033BC49 /* PlayQueueID.h */,
+				8D686D2F20E099C60033BC49 /* PlayQueueID.m */,
 			);
 			name = PlayCenter;
 			sourceTree = "<group>";
@@ -620,6 +628,8 @@
 			children = (
 				8D39B4D820CF9B89009A60BD /* DownloadCenter.h */,
 				8D39B4D920CF9B89009A60BD /* DownloadCenter.m */,
+				8D686D3120E0EFBA0033BC49 /* FileMD5Tools.h */,
+				8D686D3220E0EFBA0033BC49 /* FileMD5Tools.m */,
 			);
 			name = DownloadCenter;
 			sourceTree = "<group>";
@@ -802,6 +812,7 @@
 				8D1BD80B1EF3B42700E2928F /* MASViewConstraint.m in Sources */,
 				8D7952F920CA650B00E94DFC /* LGReachability.m in Sources */,
 				8D1BD7341EF395F500E2928F /* AFURLRequestSerialization.m in Sources */,
+				8D686D3320E0EFBA0033BC49 /* FileMD5Tools.m in Sources */,
 				8D1BD7E01EF3999A00E2928F /* Reachability.m in Sources */,
 				8D1BD7371EF395F500E2928F /* AFNetworkActivityIndicatorManager.m in Sources */,
 				8D1BD7DB1EF3999A00E2928F /* ASIFormDataRequest.m in Sources */,
@@ -832,6 +843,7 @@
 				8D1BD7DE1EF3999A00E2928F /* ASINetworkQueue.m in Sources */,
 				8D1BD7301EF395F500E2928F /* AFHTTPSessionManager.m in Sources */,
 				8D1BD8551EF3B7AA00E2928F /* STKDataSourceWrapper.m in Sources */,
+				8D686D3020E099C60033BC49 /* PlayQueueID.m in Sources */,
 				8D1BD6D41EF294BF00E2928F /* main.m in Sources */,
 				8D1BD7DF1EF3999A00E2928F /* LHNetworkQueue.m in Sources */,
 				8D1BD8501EF3B7AA00E2928F /* NSMutableArray+STKAudioPlayer.m in Sources */,

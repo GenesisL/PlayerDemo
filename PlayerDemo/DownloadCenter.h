@@ -12,11 +12,21 @@
 
 @interface DownloadCenter : NSObject <ASIProgressDelegate, ASIHTTPRequestDelegate>
 
-@property (nonatomic, strong) ASIHTTPRequest *request;
+@property (nonatomic, strong) ASIHTTPRequest *cacheRequest;
+@property (nonatomic, strong) ASIHTTPRequest *downloadRequest;
 
+//Init
 + (instancetype)shareCenter;
 
+//Reset
+- (void)resetCacheRequest;
+
+//Cache Function
 - (void)cacheFilesWithURL:(id)url;
 - (void)tryCacheFilesWithURL:(id)url;
+
+//Check Function
+- (BOOL)checkCacheFilesWithURL:(id)url OptionBlock:(void (^)(BOOL isExist, NSString  * _Nullable filePath, unsigned long long dataSize))optionBlock;
+- (void)checkDownloadFilesWithKey:(id)key URL:(id)url;
 
 @end
