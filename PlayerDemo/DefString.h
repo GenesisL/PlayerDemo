@@ -15,8 +15,10 @@
 //Notice
 #define NOTICENTER_NETWORKSTATUS        @"NetWorkStatus"
 
+#define NOTICENTER_PLAYERSTATUS         @"PlayerStatus"
 
 //Request
 #define REQUEST_HOST            @"https://app.missevan.com/"
 #define IMAGE_HOST              @"http://static.missevan.com/"
+
 

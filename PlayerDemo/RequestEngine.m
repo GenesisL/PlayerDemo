@@ -34,6 +34,8 @@ static AFHTTPRequestOperationManager *manager = nil;
             failed(responseObject, nil);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Fail Header: %@", operation.request.allHTTPHeaderFields);
+        NSLog(@"Fail Response: %@", operation.responseObject[@"info"]);
         failed(nil, error);
     }];
 }
@@ -46,6 +48,8 @@ static AFHTTPRequestOperationManager *manager = nil;
             failed(responseObject, nil);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Fail Header: %@", operation.request.allHTTPHeaderFields);
+        NSLog(@"Fail Response: %@", operation.responseObject[@"info"]);
         failed(nil, error);
     }];
 }
@@ -60,6 +64,8 @@ static AFHTTPRequestOperationManager *manager = nil;
             failed(responseObject, nil);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Fail Header: %@", operation.request.allHTTPHeaderFields);
+        NSLog(@"Fail Response: %@", operation.responseObject[@"info"]);
         failed(nil, error);
     }];
 }
@@ -69,6 +75,8 @@ static AFHTTPRequestOperationManager *manager = nil;
     [[self sharedAFManager] HEAD:requestURLString parameters:nil success:^(AFHTTPRequestOperation *operation) {
         success(operation.response.allHeaderFields, nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Fail Header: %@", operation.request.allHTTPHeaderFields);
+        NSLog(@"Fail Response: %@", operation.responseObject[@"info"]);
         failed(operation.response.allHeaderFields, error);
     }];
 }

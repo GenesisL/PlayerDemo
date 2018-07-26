@@ -14,16 +14,20 @@
 //Model
 #import "SoundModel.h"
 
-@interface ViewController ()
+static NSString * const cellIdentifier = @"CellIdentifier";
+
+@interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) PlayCenter *play_cen;
 
 @property (nonatomic, strong) SoundModel *model;
 
+@property (nonatomic, strong) UITableView *albumTable;
+@property (nonatomic, strong) NSArray *albumList;
+
 @property (nonatomic, strong) UIButton *play_button;
 @property (nonatomic, strong) UIButton *previous_button;
 @property (nonatomic, strong) UIButton *next_button;
-
 
 @end
 
@@ -37,11 +41,33 @@
     _play_cen = [PlayCenter mainCenter];
     
     [self createView];
+    
+    [self loadData];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - LoadData
+- (void)loadData {
+    __weak typeof(self) weakSelf = self;
+    [SoundRequestEngine getSoundListDataWithAlbumID:@"190382" Success:^(id returnValue, NSError *error) {
+        __strong typeof(self) strongSelf = weakSelf;
+        if (returnValue[@"info"][@"Datas"] && [returnValue[@"info"][@"Datas"] isKindOfClass:[NSArray class]]) {
+            NSMutableArray *mAry = [NSMutableArray array];
+            for (NSDictionary *dic in returnValue[@"info"][@"Datas"]) {
+                SoundModel *model = [SoundModel initWithDic:dic];
+                [mAry addObject:model];
+            }
+            strongSelf.albumList = [mAry copy];
+        }
+        [strongSelf.albumTable reloadData];
+    } Failed:^(id returnValue, NSError *error) {
+        NSLog(@"ReturnValue: %@", returnValue);
+    }];
 }
 
 #pragma mark - CreateView
@@ -67,25 +93,54 @@
         make.width.mas_equalTo(@80);
         make.height.mas_equalTo(@44);
     }];
+    
+    [self.view addSubview:self.albumTable];
+    [self.albumTable mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view.mas_top).with.offset(20);
+        make.left.and.right.equalTo(self.view);
+        make.bottom.equalTo(self.play_button.mas_top).with.offset(-20);
+    }];
+}
+
+#pragma mark - UITableViewDataSource
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return _albumList.count;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier forIndexPath:indexPath];
+    cell.textLabel.text = ((SoundModel *)_albumList[indexPath.row]).soundstr;
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    SoundModel *model = _albumList[indexPath.row];
+    [_play_cen addDataToQueueWithModel:model];
+    [_play_cen playAtIndex:[_play_cen searchIndexWithModel:model]];
 }
 
 #pragma mark - ButtonAction
 - (void)playButtonAction:(UIButton *)sender {
-    __weak typeof(self) weakSelf = self;
-    [SoundRequestEngine getSoundInfoWithSoundID:@"1" Success:^(id returnValue, NSError *error) {
-        if ([returnValue[@"info"] isKindOfClass:[NSDictionary class]]) {
-            weakSelf.model = [SoundModel initWithDic:returnValue[@"info"]];
-            [weakSelf.play_cen checkStatusAndPlayWithModel:weakSelf.model];
-        }
-    } Failed:^(id returnValue, NSError *error) {
-        NSLog(@"Failed: %@", returnValue);
-    }];
+//    __weak typeof(self) weakSelf = self;
+//    [SoundRequestEngine getSoundInfoWithSoundID:@"1" Success:^(id returnValue, NSError *error) {
+//        __strong typeof(self) strongSelf = weakSelf;
+//        if ([returnValue[@"info"] isKindOfClass:[NSDictionary class]]) {
+//            strongSelf.model = [SoundModel initWithDic:returnValue[@"info"]];
+//            [strongSelf.play_cen checkStatusAndPlayWithModel:strongSelf.model];
+//        }
+//    } Failed:^(id returnValue, NSError *error) {
+//        NSLog(@"Failed: %@", returnValue);
+//    }];
+    [_play_cen play];
 }
 - (void)previousButtonAction:(UIButton *)sender {
-    
+    [_play_cen previous];
 }
 - (void)nextButtonAction:(UIButton *)sender {
-    
+    [_play_cen next];
 }
 
 
@@ -113,6 +168,16 @@
         [_next_button addTarget:self action:@selector(nextButtonAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _next_button;
+}
+- (UITableView *)albumTable {
+    if (!_albumTable) {
+        _albumTable = [UITableView new];
+        _albumTable.dataSource = self;
+        _albumTable.delegate = self;
+        
+        [_albumTable registerClass:[UITableViewCell class] forCellReuseIdentifier:cellIdentifier];
+    }
+    return _albumTable;
 }
 
 @end

@@ -12,4 +12,6 @@
 
 + (void)getSoundInfoWithSoundID:(NSString *)sound_id Success:(RequestBlock)success Failed:(RequestBlock)failed ;
 
++ (void)getSoundListDataWithAlbumID:(NSString *)album_id Success:(RequestBlock)success Failed:(RequestBlock)failed;
+
 @end

@@ -103,25 +103,23 @@ NS_INLINE NSURL *checkURL (id url) {
     //AFNetWork
     __weak typeof(self) weakSelf = self;
     [RequestEngine HEADWithRequestURL:fileURL.absoluteString andSuccessBlock:^(id returnValue, NSError *error) {
-        NSLog(@"%@", returnValue);
-        NSString *fileMD5Str = [[FileMD5Tools fileMD5StringByFilePath:[cachesPath() stringByAppendingPathComponent:fileURL.lastPathComponent]] uppercaseString];
-        if (fileMD5Str && [returnValue[@"Etag"] rangeOfString:fileMD5Str].location != NSNotFound) {
-            //Not Download
-        }else {
-            //Download
-            [weakSelf cacheFilesWithURL:fileURL];
+        __strong typeof(self) strongSelf = weakSelf;
+        if (strongSelf != nil) {
+            NSLog(@"RequestHead:%@", returnValue);
+            NSString *fileMD5Str = [[FileMD5Tools fileMD5StringByFilePath:[cachesPath() stringByAppendingPathComponent:fileURL.lastPathComponent]] uppercaseString];
+            if (fileMD5Str && [returnValue[@"Etag"] rangeOfString:fileMD5Str].location != NSNotFound) {
+                //Not Download
+            }else {
+                //Download
+                [strongSelf cacheFilesWithURL:fileURL];
+            }
         }
     } andFailedBlock:^(id returnValue, NSError *error) {}];
 }
 
 #pragma mark - Check Function
 - (BOOL)checkCacheFilesWithURL:(id)url OptionBlock:(void (^)(BOOL isExist, NSString  * _Nullable filePath, unsigned long long dataSize))optionBlock {
-    NSURL *fileURL = nil;
-    if ([url isKindOfClass:[NSString class]]) {
-        fileURL = [NSURL URLWithString:url];
-    }else if ([url isKindOfClass:[NSURL class]]) {
-        fileURL = url;
-    }
+    NSURL *fileURL = checkURL(url);
     if (fileURL == nil) {
         return NO;
     }

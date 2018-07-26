@@ -31,29 +31,53 @@
     
 }
 
-#pragma mark - Add
+#pragma mark - Play Queue Manager
+- (void)addDataToQueueWithModel:(SoundModel *)model {
+    [self insertDatasToQueueWithArray:[NSArray arrayWithObject:model] Index:self.playQueue.count];
+}
 - (void)addDataToQueueWithArray:(NSArray *)dataAry {
-    
+    [self insertDatasToQueueWithArray:dataAry Index:self.playQueue.count];
+}
+- (void)insertDataToQueueWithModel:(SoundModel *)model {
+    [self insertDatasToQueueWithArray:[NSArray arrayWithObject:model] Index:self.playQueue.count];
+}
+- (void)insertDatasToQueueWithArray:(NSArray *)dataArray Index:(NSUInteger)index {
+    [self.playQueue insertObjects:dataArray atIndexes:[NSIndexSet indexSetWithIndex:index]];
+}
+- (void)removeDatasFromQueueWithIndex:(NSUInteger)index {
+    [self.playQueue removeObjectAtIndex:index];
+}
+- (void)removeAllDataFromQueue {
+    [self.playQueue removeAllObjects];
 }
 
 #pragma mark - Check Status
 - (void)checkStatusAndPlayWithModel:(SoundModel *)model {
-    //Check Download
+    if (model) {
+        //Check Download
 #warning Check Download
-    //Check Cache
-    __weak typeof(self) weakSelf = self;
-    [_download_cen checkCacheFilesWithURL:model.soundurl_64 OptionBlock:^(BOOL isExist, NSString * _Nullable filePath, unsigned long long dataSize) {
-        //Play
-        weakSelf.dataSize = dataSize;
-        if (isExist) {
-            weakSelf.fileMode = PlayerFileModeOnCache;
-            [weakSelf startStreamingWithURL:[NSURL fileURLWithPath:filePath]];
-        }else {
-            weakSelf.fileMode = PlayerFileModeOnlineStream;
-            [weakSelf startStreamingWithURL:[NSURL URLWithString:model.soundurl_64]];
-        }
-        [weakSelf.download_cen tryCacheFilesWithURL:model.soundurl_64];
-    }];
+        //Check Cache
+        __weak typeof(self) weakSelf = self;
+        [_download_cen checkCacheFilesWithURL:model.soundurl_64 OptionBlock:^(BOOL isExist, NSString * _Nullable filePath, unsigned long long dataSize) {
+            __strong typeof(self) strongSelf = weakSelf;
+            //Play
+            strongSelf.dataSize = dataSize;
+            strongSelf.currentIndex = [strongSelf searchIndexWithModel:model];
+            if (isExist) {
+                strongSelf.fileMode = PlayerFileModeOnCache;
+                [strongSelf startStreamingWithURL:[NSURL fileURLWithPath:filePath]];
+            }else {
+                strongSelf.fileMode = PlayerFileModeOnlineStream;
+                [strongSelf startStreamingWithURL:[NSURL URLWithString:model.soundurl_64]];
+            }
+            [strongSelf.download_cen tryCacheFilesWithURL:model.soundurl_64];
+        }];
+    }
+}
+
+#pragma mark - Search
+- (NSUInteger)searchIndexWithModel:(SoundModel *)model {
+    return [_playQueue indexOfObject:model];
 }
 
 #pragma mark - Play Control
@@ -86,12 +110,38 @@
     return YES;
 }
 - (BOOL)previous {
-    
-    return YES;
+    if (_playQueue.count != 0) {
+        if (_circleMode != PlayerCircleModeRandom) {
+            if (_currentIndex > 0) {
+                [self checkStatusAndPlayWithModel:[_playQueue objectAtIndex:_currentIndex - 1]];
+                return YES;
+            }else {
+                [self checkStatusAndPlayWithModel:_playQueue.lastObject];
+                return YES;
+            }
+        }else {
+            return YES;
+        }
+    }else {
+        return NO;
+    }
 }
 - (BOOL)next {
-    
-    return YES;
+    if (_playQueue.count != 0) {
+        if (_circleMode != PlayerCircleModeRandom) {
+            if (_currentIndex + 1 < _playQueue.count) {
+                [self checkStatusAndPlayWithModel:[_playQueue objectAtIndex:_currentIndex + 1]];
+                return YES;
+            }else {
+                [self checkStatusAndPlayWithModel:_playQueue.firstObject];
+                return YES;
+            }
+        }else {
+            return YES;
+        }
+    }else {
+        return NO;
+    }
 }
 - (BOOL)stop {
     [self.audioPlayer stop];
@@ -121,6 +171,7 @@
     
 }
 - (void)audioPlayer:(STKAudioPlayer *)audioPlayer stateChanged:(STKAudioPlayerState)state previousState:(STKAudioPlayerState)previousState {
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTICENTER_PLAYERSTATUS object:@(state)];
     switch (state) {
         case STKAudioPlayerStateReady:
             NSLog(@"State Changed To: Ready");
@@ -206,6 +257,21 @@
 }
 - (STKAudioPlayerState)currentState {
     return self.audioPlayer.state;
+}
+- (NSMutableArray *)playQueue {
+    if (!_playQueue) {
+        _playQueue = [NSMutableArray array];
+    }
+    return _playQueue;
+}
+
+#pragma makr - Tools
+- (void)randomPlayQueue {
+    
+}
+- (NSArray *)swapArrayWithArray:(NSArray *)array {
+    NSMutableArray *mAry = [NSMutableArray arrayWithArray:array];
+    return mAry;
 }
 
 @end

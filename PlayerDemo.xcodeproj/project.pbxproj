@@ -85,6 +85,7 @@
 		8D39B4DE20CFA1A7009A60BD /* UserDefaultCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D39B4DD20CFA1A7009A60BD /* UserDefaultCenter.m */; };
 		8D686D3020E099C60033BC49 /* PlayQueueID.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D686D2F20E099C60033BC49 /* PlayQueueID.m */; };
 		8D686D3320E0EFBA0033BC49 /* FileMD5Tools.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D686D3220E0EFBA0033BC49 /* FileMD5Tools.m */; };
+		8D686D3720E499130033BC49 /* KeyChainManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D686D3620E499130033BC49 /* KeyChainManager.m */; };
 		8D7952F520CA621200E94DFC /* PlayCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7952F420CA621200E94DFC /* PlayCenter.m */; };
 		8D7952F920CA650B00E94DFC /* LGReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7952F820CA650B00E94DFC /* LGReachability.m */; };
 		8D7952FD20CA658B00E94DFC /* Sentry.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8D7952FA20CA657800E94DFC /* Sentry.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -280,6 +281,8 @@
 		8D686D2F20E099C60033BC49 /* PlayQueueID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayQueueID.m; sourceTree = "<group>"; };
 		8D686D3120E0EFBA0033BC49 /* FileMD5Tools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileMD5Tools.h; sourceTree = "<group>"; };
 		8D686D3220E0EFBA0033BC49 /* FileMD5Tools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FileMD5Tools.m; sourceTree = "<group>"; };
+		8D686D3520E499130033BC49 /* KeyChainManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyChainManager.h; sourceTree = "<group>"; };
+		8D686D3620E499130033BC49 /* KeyChainManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KeyChainManager.m; sourceTree = "<group>"; };
 		8D7952F320CA621200E94DFC /* PlayCenter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PlayCenter.h; sourceTree = "<group>"; };
 		8D7952F420CA621200E94DFC /* PlayCenter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PlayCenter.m; sourceTree = "<group>"; };
 		8D7952F720CA650B00E94DFC /* LGReachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGReachability.h; sourceTree = "<group>"; };
@@ -336,6 +339,7 @@
 		8D1BD6D11EF294BF00E2928F /* PlayerDemo */ = {
 			isa = PBXGroup;
 			children = (
+				8D686D3420E498CB0033BC49 /* Tools */,
 				8D7C6B2020CF968000A9F764 /* ViewController */,
 				8D1BD7071EF395E700E2928F /* Plugin */,
 				8D1BD7001EF3933E00E2928F /* RequestEngine */,
@@ -623,13 +627,22 @@
 			name = UserDefaultCenter;
 			sourceTree = "<group>";
 		};
+		8D686D3420E498CB0033BC49 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				8D686D3120E0EFBA0033BC49 /* FileMD5Tools.h */,
+				8D686D3220E0EFBA0033BC49 /* FileMD5Tools.m */,
+				8D686D3520E499130033BC49 /* KeyChainManager.h */,
+				8D686D3620E499130033BC49 /* KeyChainManager.m */,
+			);
+			name = Tools;
+			sourceTree = "<group>";
+		};
 		8D6ECE0320CF99E10047E710 /* DownloadCenter */ = {
 			isa = PBXGroup;
 			children = (
 				8D39B4D820CF9B89009A60BD /* DownloadCenter.h */,
 				8D39B4D920CF9B89009A60BD /* DownloadCenter.m */,
-				8D686D3120E0EFBA0033BC49 /* FileMD5Tools.h */,
-				8D686D3220E0EFBA0033BC49 /* FileMD5Tools.m */,
 			);
 			name = DownloadCenter;
 			sourceTree = "<group>";
@@ -844,6 +857,7 @@
 				8D1BD7301EF395F500E2928F /* AFHTTPSessionManager.m in Sources */,
 				8D1BD8551EF3B7AA00E2928F /* STKDataSourceWrapper.m in Sources */,
 				8D686D3020E099C60033BC49 /* PlayQueueID.m in Sources */,
+				8D686D3720E499130033BC49 /* KeyChainManager.m in Sources */,
 				8D1BD6D41EF294BF00E2928F /* main.m in Sources */,
 				8D1BD7DF1EF3999A00E2928F /* LHNetworkQueue.m in Sources */,
 				8D1BD8501EF3B7AA00E2928F /* NSMutableArray+STKAudioPlayer.m in Sources */,
@@ -942,7 +956,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -984,7 +998,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -1005,6 +1019,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.missevan.PlayerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -1022,6 +1037,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.missevan.PlayerDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -29,6 +29,7 @@ typedef NS_ENUM(NSUInteger, PlayerFileMode) {
 
 //Player
 @property (nonatomic, strong) NSMutableArray *playQueue;
+@property (nonatomic, strong) NSMutableArray *randomQueue;
 @property (nonatomic, strong) STKAudioPlayer *audioPlayer;
 @property (nonatomic, strong) STKDataSource *dataSource;
 
@@ -36,7 +37,8 @@ typedef NS_ENUM(NSUInteger, PlayerFileMode) {
 @property (nonatomic, strong) DownloadCenter *download_cen;
 
 //Current Status
-@property (nonatomic, readonly, assign) NSInteger currentIndex;
+@property (nonatomic, assign) NSUInteger currentIndex;
+@property (nonatomic, copy) SoundModel *currentModel;
 @property (nonatomic, readonly, assign) STKAudioPlayerState currentState;
 
 //Circle Mode
@@ -49,11 +51,19 @@ typedef NS_ENUM(NSUInteger, PlayerFileMode) {
 
 + (instancetype)mainCenter;
 
-//Add
-- (void)addDataToQueueWithArray:(NSArray *)dataAry;
+//Play Queue Manager
+- (void)addDataToQueueWithModel:(SoundModel *)model;
+- (void)addDatasToQueueWithArray:(NSArray *)dataAry;
+- (void)insertDataToQueueWithModel:(SoundModel *)model;
+- (void)insertDatasToQueueWithArray:(NSArray *)dataArray Index:(NSUInteger)index;
+- (void)removeDataFromQueueWithIndex:(NSUInteger)index;
+- (void)removeAllDataFromQueue;
 
 //Check
 - (void)checkStatusAndPlayWithModel:(SoundModel *)model;
+
+//Search
+- (NSUInteger)searchIndexWithModel:(SoundModel *)model;
 
 //Play Control
 - (BOOL)play;

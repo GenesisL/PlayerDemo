@@ -15,3 +15,12 @@
  *
  */
 static NSString * const kAPISound = @"sound/sound";
+
+/*
+ *  GET
+ *  根据音单ID获取单音
+ *
+ *  @param  album_id
+ *
+ */
+static NSString * const kAPISoundGetAlbumSound = @"sound/get-album-sound";

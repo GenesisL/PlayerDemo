@@ -20,4 +20,14 @@
     }];
 }
 
++ (void)getSoundListDataWithAlbumID:(NSString *)album_id Success:(RequestBlock)success Failed:(RequestBlock)failed {
+    NSDictionary *parameters = [NSDictionary dictionaryWithObjectsAndKeys:
+                                album_id, @"album_id", nil];
+    [super GETWithRequestURL:[REQUEST_HOST stringByAppendingString:kAPISoundGetAlbumSound] andParameters:parameters andSuccessBlock:^(id returnValue, NSError *error) {
+        success(returnValue, nil);
+    } andFailedBlock:^(id returnValue, NSError *error) {
+        failed(returnValue, error);
+    }];
+}
+
 @end
